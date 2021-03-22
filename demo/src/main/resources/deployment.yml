@@ -1,0 +1,34 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: demo
+  labels:
+    name: demo
+spec:
+  type: LoadBalancer
+  ports:
+    - nodePort: 30163
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:           
+    app: demo        
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+  labels:
+    app: demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo
+    spec:
+      containers:
+        - name: demo
+          image: linjudock19/demo
+          ports:
+            - containerPort: 8080
